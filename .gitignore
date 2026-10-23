@@ -218,3 +218,21 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# MFT109 local market data and generated research outputs
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/data/cache/*
+!/data/cache/.gitkeep
+/outputs/baseline/*
+!/outputs/baseline/.gitkeep
+/outputs/optimization/*
+!/outputs/optimization/.gitkeep
+.env.*
+!.env.example
+
+# Small fixed-universe research inputs are versionable; market caches stay ignored.
+!/data/raw/sp500_constituents.csv
+!/data/raw/sp500_constituents.metadata.json

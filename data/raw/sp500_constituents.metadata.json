@@ -1,0 +1,7 @@
+{
+  "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
+  "retrieved_at_utc": "2026-10-23T08:58:59.509509+00:00",
+  "securities": 503,
+  "universe_sha256": "1ea0fbbd0b0981f9da91694f2b3abbcb31538ade3f5e9729d53beff767b5dd40",
+  "limitation": "Current membership fixed for all history; survivorship bias."
+}

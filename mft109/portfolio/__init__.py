@@ -1,0 +1,1 @@
+"""Equal-weight portfolio construction."""
