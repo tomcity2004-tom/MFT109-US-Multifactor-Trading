@@ -1,0 +1,5 @@
+# Phase 1 direct dependencies, pinned to the versions validated in this environment.
+pandas==3.1.0
+numpy==2.5.4
+yfinance==1.7.0
+pyarrow==26.0.0
