@@ -7,7 +7,9 @@ Financial Algorithmic Trading course.
 methodology specification. [AGENTS.md](AGENTS.md) defines development rules.
 
 Phase 1 implements data acquisition, validation, conservative cleaning, and caching.
-No factor, strategy, backtest, performance, optimization, or dashboard logic exists.
+Phase 2 adds the four raw factors; see [the raw-factor guide](docs/PHASE2_RAW_FACTORS.md).
+No factor standardization, scoring, strategy, backtest, performance, optimization,
+or dashboard logic exists.
 See [the data pipeline guide](docs/DATA_PIPELINE.md) for commands and data policies,
 and [the validation record](docs/PHASE1_VALIDATION.md) for live results and limitations.
 
@@ -59,9 +61,9 @@ Git; the small fixed-universe CSV and provenance metadata can be versioned.
 | `notebooks/` | Later exploratory and academic analysis notebooks |
 | `dashboard/` | Reserved for Phase 9 Streamlit presentation; no dashboard implemented |
 
-Configuration and data modules are implemented; later quantitative components
-remain docstring-only placeholders. Use reusable core modules for future notebook
-and dashboard integration.
+Configuration, data, and raw-factor modules are implemented; factor processing and
+later quantitative components remain docstring-only placeholders. Use reusable
+core modules for future notebook and dashboard integration.
 
 ## Baseline and research boundaries
 
@@ -79,12 +81,14 @@ fabricate missing values. Configuration dates are inclusive research boundaries;
 the provider adapter adds one day to the exclusive yfinance end date.
 
 Adjusted prices and conservative missing-data handling are explicit in the data
-pipeline. Execution-price conventions, turnover definitions, statistical degrees
-of freedom, and the optimization grid remain unresolved. Resolve material methodological decisions explicitly before
+pipeline. Raw volatility uses sample standard deviation (`ddof=1`). Execution-price
+conventions, turnover definitions, other statistical conventions, and the
+optimization grid remain unresolved. Resolve material methodological decisions explicitly before
 implementing the affected phase. Baseline settings must not be silently changed;
 optimization results remain separate.
 
 ## Next phase
 
-Phase 2: factor calculation. Begin only when explicitly requested. Phase 1 does
-not calculate factors or official strategy performance statistics.
+Phase 3: cross-sectional standardization and composite scoring. Begin only when
+explicitly requested after review of Phase 2. Raw factors do not constitute a
+ranked portfolio or official strategy performance statistics.
