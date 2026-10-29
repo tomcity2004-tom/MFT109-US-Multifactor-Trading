@@ -11,6 +11,7 @@ from mft109.backtesting.execution import execution_schedule, official_sessions
 from mft109.backtesting.transaction_costs import portfolio_turnover, transaction_cost_fraction
 from mft109.benchmark import build_spy_benchmark
 from mft109.config import BASELINE, BaselineSettings
+from mft109.optimization.scenarios import Scenario, check_scenario
 from mft109.portfolio import CASH_ASSET, equal_weight_target
 from mft109.ranking import MonthlySelection
 
@@ -56,6 +57,7 @@ def run_backtest(
     *,
     sessions: pd.DatetimeIndex,
     baseline: BaselineSettings = BASELINE,
+    scenario: Scenario | None = None,
 ) -> BacktestResult:
     """Value old units, calculate drift/turnover, charge cost, then allocate new units.
 
@@ -64,13 +66,16 @@ def run_backtest(
     liquidation is allowed. Inputs are not mutated and this function performs no I/O.
     The optional date bounds support deterministic small fixtures; economic baseline
     constants remain locked at $100,000, NAV 1 and 10 bps.
+    Explicit approved Phase 7 scenarios vary N, schedule or cost via the shared
+    accounting functions; default calls retain every Phase 5 convention.
     """
     if (baseline.initial_capital_usd != 100000 or baseline.initial_nav != 1
             or baseline.transaction_cost_rate != 0.001 or baseline.top_n != 20
             or baseline.benchmark != "SPY"):
         raise ValueError("Phase 5 economic baseline settings must remain unchanged")
+    check_scenario(scenario)
     official = official_sessions(sessions, baseline)
-    ranked, summary = selection_inputs(selection, official)
+    ranked, summary = selection_inputs(selection, official, scenario=scenario)
     selected = ranked.loc[ranked.selected]
     grid = adjusted_price_grid(market_data, official, sorted(selected.ticker.unique()))
     benchmark = build_spy_benchmark(spy_adjusted_close, sessions=sessions,
@@ -115,7 +120,7 @@ def run_backtest(
         post_value = pre_value
         if rebalance is not None:
             names = names_by_date.get(formation, [])
-            target = equal_weight_target(names, prices)
+            target = equal_weight_target(names, prices, scenario=scenario)
             executable = [t for t in target.weights.index if t != CASH_ASSET]
             flags = []
             for ticker in target.excluded_tickers:
@@ -128,7 +133,7 @@ def run_backtest(
             if flags:
                 LOGGER.warning("Rebalance %s: %s", date.date(), ";".join(flags))
             turnover = portfolio_turnover(pre_weights, target.weights)
-            cost_fraction = transaction_cost_fraction(turnover)
+            cost_fraction = transaction_cost_fraction(turnover, scenario=scenario)
             cost_usd = pre_value * cost_fraction
             post_value = pre_value - cost_usd
             units = {ticker: post_value * float(target.weights[ticker]) / float(prices[ticker])

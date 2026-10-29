@@ -5,6 +5,7 @@ from collections.abc import Sequence
 import pandas as pd
 
 from mft109.config import BASELINE
+from mft109.optimization.scenarios import Scenario, check_scenario
 from mft109.factors._inputs import session_index
 from mft109.factors.liquidity import calculate_liquidity
 from mft109.factors.low_volatility import calculate_volatility
@@ -20,6 +21,7 @@ def calculate_raw_factors(
     *,
     sessions: pd.DatetimeIndex,
     tickers: Sequence[str],
+    scenario: Scenario | None = None,
 ) -> pd.DataFrame:
     """Return date/ticker plus four raw factors for every requested session/stock.
 
@@ -28,7 +30,10 @@ def calculate_raw_factors(
     NaN inputs on that clock, not filled observations. Entirely unavailable
     securities remain present with NaN factors. No network, file writes, stock
     selection, or cross-sectional processing is performed.
+    An explicit approved Phase 7 scenario changes only its declared window;
+    legacy raw-column names remain stable for the shared scoring interface.
     """
+    check_scenario(scenario)
     calendar = session_index(sessions)
     if isinstance(tickers, str):
         raise TypeError("tickers must be a sequence of fixed-universe Yahoo symbols")
@@ -66,9 +71,9 @@ def calculate_raw_factors(
             price, volume = stock.adjusted_close, stock.volume
         factors = pd.concat([
             calculate_momentum(price, sessions=calendar),
-            calculate_volatility(price, sessions=calendar),
+            calculate_volatility(price, sessions=calendar, window=int(scenario.parameter("volatility_window")) if scenario else None),
             calculate_liquidity(price, volume, sessions=calendar),
-            calculate_reversal(price, sessions=calendar),
+            calculate_reversal(price, sessions=calendar, window=int(scenario.parameter("reversal_window")) if scenario else None),
         ], axis=1)
         factors.insert(0, "ticker", ticker)
         frames.append(factors.reset_index())
