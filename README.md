@@ -19,6 +19,10 @@ Phase 6 adds performance metrics, daily drawdowns and calendar-year returns;
 see [the performance guide](docs/PHASE6_PERFORMANCE_ANALYSIS.md).
 Phase 7 adds predefined one-at-a-time sensitivity tables;
 see [the sensitivity guide](docs/PHASE7_SENSITIVITY_ANALYSIS.md).
+Phase 8 adds offline end-to-end, reproducibility and approved-baseline regression
+checks; see [the validation report](docs/PHASE8_TESTING_VALIDATION.md).
+The approved-cache validation passed all 350 tests, including 30 Phase 8 tests;
+the implementation is awaiting review.
 Unrestricted optimization and dashboard logic are not implemented.
 See [the data pipeline guide](docs/DATA_PIPELINE.md) for commands and data policies,
 and [the validation record](docs/PHASE1_VALIDATION.md) for live results and limitations.
@@ -38,7 +42,12 @@ python -c "from mft109.config import BASELINE; print(BASELINE)"
 Phase 1 uses pinned pandas, NumPy, yfinance, and PyArrow dependencies. The root-level
 package works directly from the repository root without editable installation or
 PYTHONPATH changes. Tests use deterministic fixtures and require no Yahoo access.
-Imports do not download data or create files. Run the data pipeline explicitly:
+Imports do not download data or create files. Phase 8 integration checks require
+the approved local cache; use
+`MFT109_REQUIRE_APPROVED_CACHE=1 python -B -m unittest discover -s tests -v`
+for a full validation that fails instead of skipping when the cache is absent.
+
+Run the data pipeline explicitly:
 
 ```bash
 python -m mft109.data.pipeline --universe-only
@@ -104,7 +113,7 @@ optimization results remain separate.
 
 ## Next phase
 
-Review Phase 7 before proceeding. An approved [FISV source-data revision](docs/FISV_DATA_REVISION.md)
+Review Phase 8 before proceeding. An approved [FISV source-data revision](docs/FISV_DATA_REVISION.md)
 resolves two previously blocked scenarios; all 21 revised-data runs complete.
 Baseline methodology is unchanged, but revised-data results differ from the
-preserved original results. Phase 8 has not begun.
+preserved original results. Phase 9 and dashboard implementation have not begun.
