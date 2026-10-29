@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from mft109.config import BASELINE
+from mft109.optimization.scenarios import Scenario, check_scenario
 from mft109.portfolio import CASH_ASSET
 
 
@@ -32,10 +33,11 @@ def portfolio_turnover(pre_weights: pd.Series, target_weights: pd.Series) -> flo
     return 0.5 * float(difference.abs().sum())
 
 
-def transaction_cost_fraction(turnover: float) -> float:
+def transaction_cost_fraction(turnover: float, *, scenario: Scenario | None = None) -> float:
     """Return turnover * 0.001; the engine charges this once on pre-cost wealth."""
     if not math.isfinite(turnover) or not 0 <= turnover <= 1 + 1e-12:
         raise ValueError("Long-only portfolio turnover must be finite and between 0 and 1")
     if BASELINE.transaction_cost_rate != 0.001:
         raise ValueError("Locked baseline transaction-cost rate must remain 0.001")
-    return turnover * BASELINE.transaction_cost_rate
+    check_scenario(scenario)
+    return turnover * (scenario.cost_rate if scenario else BASELINE.transaction_cost_rate)

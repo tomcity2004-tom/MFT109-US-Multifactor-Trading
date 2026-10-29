@@ -17,7 +17,9 @@ costs, daily accounting and SPY Buy-and-Hold;
 see [the portfolio/backtest guide](docs/PHASE5_PORTFOLIO_BACKTEST.md).
 Phase 6 adds performance metrics, daily drawdowns and calendar-year returns;
 see [the performance guide](docs/PHASE6_PERFORMANCE_ANALYSIS.md).
-Optimization and dashboard logic are not implemented.
+Phase 7 adds predefined one-at-a-time sensitivity tables;
+see [the sensitivity guide](docs/PHASE7_SENSITIVITY_ANALYSIS.md).
+Unrestricted optimization and dashboard logic are not implemented.
 See [the data pipeline guide](docs/DATA_PIPELINE.md) for commands and data policies,
 and [the validation record](docs/PHASE1_VALIDATION.md) for live results and limitations.
 
@@ -71,7 +73,8 @@ Git; the small fixed-universe CSV and provenance metadata can be versioned.
 
 Configuration, data, raw-factor, factor-processing, and ranking modules are
 implemented along with portfolio, backtesting, benchmark and performance metrics.
-Descriptive data analysis and later components remain docstring-only placeholders.
+Controlled sensitivity analysis is also implemented. Descriptive data analysis
+and dashboard components remain placeholders.
 Use reusable core modules for future notebook and dashboard integration.
 
 ## Baseline and research boundaries
@@ -93,12 +96,15 @@ Adjusted prices and conservative missing-data handling are explicit in the data
 pipeline. Raw volatility uses sample standard deviation (`ddof=1`). Execution-price
 conventions and cash-inclusive turnover are documented in the Phase 5 guide.
 Performance-statistic conventions are documented in the Phase 6 guide.
-The optimization grid remains unresolved.
+The approved Phase 7 scenarios are fixed in the sensitivity guide; no unrestricted
+optimization grid or automatic best-parameter selection is provided.
 Resolve material methodological decisions explicitly before
 implementing the affected phase. Baseline settings must not be silently changed;
 optimization results remain separate.
 
 ## Next phase
 
-Review and validate Phase 6 before proceeding. Phase 7 optimization and sensitivity
-analysis require explicit approval and have not begun.
+Review Phase 7 before proceeding. An approved [FISV source-data revision](docs/FISV_DATA_REVISION.md)
+resolves two previously blocked scenarios; all 21 revised-data runs complete.
+Baseline methodology is unchanged, but revised-data results differ from the
+preserved original results. Phase 8 has not begun.

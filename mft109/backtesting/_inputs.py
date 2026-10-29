@@ -4,14 +4,17 @@ import numpy as np
 import pandas as pd
 
 from mft109.config import BASELINE
+from mft109.optimization.scenarios import Scenario, check_scenario
 from mft109.portfolio import CASH_ASSET
 from mft109.ranking import MonthlySelection
 
 
 def selection_inputs(
-    selection: MonthlySelection, official: pd.DatetimeIndex
+    selection: MonthlySelection, official: pd.DatetimeIndex, *, scenario: Scenario | None = None
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Copy validated selection records; reject inconsistent inputs, never rerank."""
+    check_scenario(scenario)
+    top_n = scenario.top_n if scenario else BASELINE.top_n
     if not isinstance(selection, MonthlySelection):
         raise TypeError("Expected the validated Phase 4 MonthlySelection output")
     ranked = selection.ranked.copy(deep=True)
@@ -32,8 +35,10 @@ def selection_inputs(
     # Every official calendar month must retain its Phase 4 month-end record,
     # including an empty selection and the final unexecutable formation.
     month_ends = pd.Series(official, index=official).groupby(official.to_period("M")).max()
+    if scenario is not None and scenario.quarterly:
+        month_ends = month_ends[month_ends.dt.month.isin([3, 6, 9, 12])]
     if set(summary.formation_date) != set(month_ends):
-        raise ValueError("Phase 4 summary must cover every official month-end")
+        raise ValueError("Selection summary must cover every required official formation")
     if ranked.duplicated(["formation_date", "ticker"]).any():
         raise ValueError("Duplicate formation/ticker selection records")
     if not ranked.formation_date.isin(summary.formation_date).all():
@@ -46,7 +51,7 @@ def selection_inputs(
                 or ranked["rank"].isna().any()):
             raise ValueError("Phase 4 ranks must be integer values")
         if (not ranked.eligible.all() or not np.isfinite(ranked.composite_score).all()
-                or not ranked.selected.eq(ranked["rank"] <= BASELINE.top_n).all()):
+                or not ranked.selected.eq(ranked["rank"] <= top_n).all()):
             raise ValueError("Phase 4 ranks/flags/scores are inconsistent")
         if ranked.ticker.map(lambda t: not isinstance(t, str) or not t.strip()
                              or t != t.strip() or t in (CASH_ASSET, BASELINE.benchmark)).any():
@@ -55,7 +60,7 @@ def selection_inputs(
         group = ranked.loc[ranked.formation_date.eq(row.formation_date)]
         if (row.eligible_count != len(group) or row.selected_count != int(group.selected.sum())
                 or sorted(group["rank"].tolist()) != list(range(1, len(group) + 1))
-                or row.fewer_than_top_n != (row.selected_count < BASELINE.top_n)):
+                or row.fewer_than_top_n != (row.selected_count < top_n)):
             raise ValueError("Phase 4 summary counts or unique sequential ranks are inconsistent")
     return (ranked.sort_values(["formation_date", "rank"]).reset_index(drop=True),
             summary.sort_values("formation_date").reset_index(drop=True))

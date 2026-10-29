@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from mft109.config import BASELINE
+from mft109.optimization.scenarios import Scenario, check_scenario
 from mft109.factors import RAW_FACTOR_COLUMNS
 from mft109.factors._inputs import session_index
 from mft109.processing import SCORE_COLUMNS
@@ -59,7 +60,7 @@ def _validated_scores(scored_factors: pd.DataFrame) -> pd.DataFrame:
 
 
 def rank_and_select(
-    scored_factors: pd.DataFrame, *, sessions: pd.DatetimeIndex
+    scored_factors: pd.DataFrame, *, sessions: pd.DatetimeIndex, scenario: Scenario | None = None
 ) -> MonthlySelection:
     """Rank exact-formation-date eligible finite scores, then mark ranks <= 20.
 
@@ -67,11 +68,17 @@ def rank_and_select(
     ties. Ranks are unique sequential integers within each date. There is no
     score filling, recomputation, weight assignment, or next-day execution.
     Counts explicitly document all months with fewer than 20, including zero.
+    An explicit Phase 7 scenario may change N or retain quarter-end formations;
+    the ranking/tie-break algorithm and default monthly Top 20 remain unchanged.
     """
     if type(BASELINE.top_n) is not int or BASELINE.top_n != 20:
         raise ValueError("Phase 4 baseline requires the configured integer top_n=20")
+    check_scenario(scenario)
+    top_n = scenario.top_n if scenario else BASELINE.top_n
     calendar = session_index(sessions)
     formations = monthly_formation_dates(calendar)
+    if scenario is not None and scenario.quarterly:
+        formations = formations[formations.month.isin([3, 6, 9, 12])]
     data = _validated_scores(scored_factors)
     # Warm-up and post-backtest observations never become official formations.
     data = data.loc[data.date.between(pd.Timestamp(BASELINE.backtest_start),
@@ -88,7 +95,7 @@ def rank_and_select(
         ["date", "composite_score", "ticker"], ascending=[True, False, True], kind="stable"
     ).reset_index(drop=True).rename(columns={"date": "formation_date"})
     ranked["rank"] = (ranked.groupby("formation_date", sort=False).cumcount() + 1).astype("int64")
-    ranked["selected"] = ranked["rank"].le(BASELINE.top_n)
+    ranked["selected"] = ranked["rank"].le(top_n)
 
     # Zero counts are diagnostics only; no stock rows or scores are fabricated.
     eligible_counts = ranked.groupby("formation_date").size().reindex(formations, fill_value=0)
@@ -96,5 +103,5 @@ def rank_and_select(
     summary = pd.DataFrame({"formation_date": formations,
                             "eligible_count": eligible_counts.to_numpy(dtype="int64"),
                             "selected_count": selected_counts.to_numpy(dtype="int64")})
-    summary["fewer_than_top_n"] = summary.eligible_count.lt(BASELINE.top_n)
+    summary["fewer_than_top_n"] = summary.eligible_count.lt(top_n)
     return MonthlySelection(ranked=ranked, formation_summary=summary)

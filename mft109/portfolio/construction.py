@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 
 from mft109.config import BASELINE
+from mft109.optimization.scenarios import Scenario, check_scenario
 
 
 CASH_ASSET = "__CASH__"
@@ -21,20 +22,22 @@ class TargetPortfolio:
 
 
 def equal_weight_target(
-    selected_tickers: Sequence[str], execution_prices: pd.Series
+    selected_tickers: Sequence[str], execution_prices: pd.Series, *, scenario: Scenario | None = None
 ) -> TargetPortfolio:
     """Equal-weight only selected stocks with finite positive prices at execution.
 
     No unselected stock is a replacement. Zero executable stocks targets cash.
     Missing current holdings must be handled by valuation before calling this.
     """
+    check_scenario(scenario)
+    top_n = scenario.top_n if scenario else BASELINE.top_n
     if isinstance(selected_tickers, str):
         raise TypeError("selected_tickers must be a sequence, not one string")
     tickers = list(selected_tickers)
-    if (len(set(tickers)) != len(tickers) or len(tickers) > BASELINE.top_n
+    if (len(set(tickers)) != len(tickers) or len(tickers) > top_n
             or any(not isinstance(t, str) or not t.strip() or t != t.strip()
                    or t in (CASH_ASSET, BASELINE.benchmark) for t in tickers)):
-        raise ValueError("Expected unique Phase 4 selected stock identifiers, at most 20")
+        raise ValueError(f"Expected unique selected stock identifiers, at most {top_n}")
     if not isinstance(execution_prices, pd.Series) or not execution_prices.index.is_unique:
         raise ValueError("Execution prices must be a Series with unique stock identifiers")
     executable, excluded = [], []

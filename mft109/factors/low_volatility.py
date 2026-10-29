@@ -18,15 +18,18 @@ def calculate_daily_returns(
 
 
 def calculate_volatility(
-    adjusted_close: pd.Series, *, sessions: pd.DatetimeIndex
+    adjusted_close: pd.Series, *, sessions: pd.DatetimeIndex, window: int | None = None
 ) -> pd.Series:
     """Sample std (ddof=1) of 60 consecutive valid returns, times sqrt(252).
 
     A full window needs 61 consecutive valid prices. Output is raw nonnegative
     volatility, without the later low-volatility direction transform or Z-score.
+    Phase 7 may explicitly request 20 or 120; the default remains 60.
     """
     returns = calculate_daily_returns(adjusted_close, sessions=sessions)
-    window = BASELINE.volatility_lookback_days
+    window = BASELINE.volatility_lookback_days if window is None else window
+    if type(window) is not int or window not in (20, 60, 120):
+        raise ValueError("Approved volatility windows are 20, 60 and 120 sessions")
     result = returns.rolling(window, min_periods=window).std(ddof=1)
     result = result * np.sqrt(BASELINE.trading_days_per_year)
     return finite_result(result, "volatility60")
