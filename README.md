@@ -12,8 +12,10 @@ Phase 3 adds eligibility, cross-sectional standardization, and composite scoring
 see [the scoring guide](docs/PHASE3_FACTOR_SCORING.md).
 Phase 4 adds monthly ranking and Top 20 selection;
 see [the ranking guide](docs/PHASE4_RANKING_SELECTION.md).
-No portfolio allocation, execution, backtest, performance, optimization, or
-dashboard logic exists.
+Phase 5 adds portfolio construction, adjusted-close execution, turnover-based
+costs, daily accounting and SPY Buy-and-Hold;
+see [the portfolio/backtest guide](docs/PHASE5_PORTFOLIO_BACKTEST.md).
+Performance analytics, optimization and dashboard logic are not implemented.
 See [the data pipeline guide](docs/DATA_PIPELINE.md) for commands and data policies,
 and [the validation record](docs/PHASE1_VALIDATION.md) for live results and limitations.
 
@@ -66,7 +68,8 @@ Git; the small fixed-universe CSV and provenance metadata can be versioned.
 | `dashboard/` | Reserved for Phase 9 Streamlit presentation; no dashboard implemented |
 
 Configuration, data, raw-factor, factor-processing, and ranking modules are
-implemented; portfolio and later components remain docstring-only placeholders.
+implemented along with portfolio, backtesting and benchmark modules. Performance
+analysis and later components remain docstring-only placeholders.
 Use reusable core modules for future notebook and dashboard integration.
 
 ## Baseline and research boundaries
@@ -86,13 +89,13 @@ the provider adapter adds one day to the exclusive yfinance end date.
 
 Adjusted prices and conservative missing-data handling are explicit in the data
 pipeline. Raw volatility uses sample standard deviation (`ddof=1`). Execution-price
-conventions, turnover definitions, other statistical conventions, and the
-optimization grid remain unresolved. Resolve material methodological decisions explicitly before
+conventions and cash-inclusive turnover are documented in the Phase 5 guide.
+Later statistical conventions and the optimization grid remain unresolved.
+Resolve material methodological decisions explicitly before
 implementing the affected phase. Baseline settings must not be silently changed;
 optimization results remain separate.
 
 ## Next phase
 
-Phase 5: portfolio allocation and later execution/backtesting. Begin only when
-explicitly requested after review of Phase 4. Selected stock lists do not include
-portfolio weights or official strategy performance statistics.
+Review and validate Phase 5 before proceeding. Phase 6 will add performance
+analytics only after explicit approval; no Phase 6 implementation has begun.
