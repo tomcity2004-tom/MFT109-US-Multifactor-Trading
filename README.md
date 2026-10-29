@@ -10,8 +10,10 @@ Phase 1 implements data acquisition, validation, conservative cleaning, and cach
 Phase 2 adds the four raw factors; see [the raw-factor guide](docs/PHASE2_RAW_FACTORS.md).
 Phase 3 adds eligibility, cross-sectional standardization, and composite scoring;
 see [the scoring guide](docs/PHASE3_FACTOR_SCORING.md).
-No ranking, selection, portfolio, backtest, performance, optimization, or dashboard
-logic exists.
+Phase 4 adds monthly ranking and Top 20 selection;
+see [the ranking guide](docs/PHASE4_RANKING_SELECTION.md).
+No portfolio allocation, execution, backtest, performance, optimization, or
+dashboard logic exists.
 See [the data pipeline guide](docs/DATA_PIPELINE.md) for commands and data policies,
 and [the validation record](docs/PHASE1_VALIDATION.md) for live results and limitations.
 
@@ -63,8 +65,8 @@ Git; the small fixed-universe CSV and provenance metadata can be versioned.
 | `notebooks/` | Later exploratory and academic analysis notebooks |
 | `dashboard/` | Reserved for Phase 9 Streamlit presentation; no dashboard implemented |
 
-Configuration, data, raw-factor, and factor-processing modules are implemented;
-ranking and later quantitative components remain docstring-only placeholders.
+Configuration, data, raw-factor, factor-processing, and ranking modules are
+implemented; portfolio and later components remain docstring-only placeholders.
 Use reusable core modules for future notebook and dashboard integration.
 
 ## Baseline and research boundaries
@@ -91,6 +93,6 @@ optimization results remain separate.
 
 ## Next phase
 
-Phase 4: stock ranking and portfolio construction. Begin only when explicitly
-requested after review of Phase 3. Composite scores do not constitute a ranked
-portfolio or official strategy performance statistics.
+Phase 5: portfolio allocation and later execution/backtesting. Begin only when
+explicitly requested after review of Phase 4. Selected stock lists do not include
+portfolio weights or official strategy performance statistics.
