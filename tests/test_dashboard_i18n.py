@@ -108,6 +108,36 @@ class BilingualDataTests(unittest.TestCase):
             np.testing.assert_array_equal(en.data.select_dtypes(include=np.number).to_numpy(),zh.data.select_dtypes(include=np.number).to_numpy())
         assert_frame_equal(b.daily,before,check_exact=True)
 
+    def test_drawdown_y_padding_preserves_original_dates_and_nonpositive_daily_series(self):
+        b=self.bundle
+        before=b.daily.copy(deep=True)
+        for language in ('en','zh_TW'):
+            chart=charts.time_chart(b.daily,drawdown=True,language=language)
+            spec=chart.to_dict(validate=True)
+            x=spec['encoding']['x']
+            self.assertEqual(x['type'],'temporal')
+            self.assertEqual(x,{'field':'date','title':t('Date',language),'type':'temporal'})
+            y=spec['encoding']['y']
+            self.assertEqual(y['scale'],{'domain':[-.40,.05],'nice':False})
+            self.assertEqual(y['axis']['format'],'.0%')
+            self.assertEqual(y['axis']['values'],[tick/100 for tick in range(-40,6,5)])
+            self.assertEqual(y['title'],t('Drawdown',language))
+            self.assertTrue((chart.data[[t('Strategy',language),'SPY']]<=0).all().all())
+            expected=b.daily[['date','strategy_drawdown','spy_drawdown']].rename(
+                columns={'strategy_drawdown':t('Strategy',language),'spy_drawdown':'SPY'})
+            assert_frame_equal(chart.data,expected,check_exact=True)
+            self.assertEqual(len(chart.data),2514)
+            self.assertEqual(spec['transform'],[{'fold':[t('Strategy',language),'SPY'],'as':['Series','Value']}])
+            self.assertNotIn('timeUnit',x)
+            self.assertEqual(spec['encoding']['tooltip'][0]['format'],'%Y-%m-%d')
+            self.assertEqual(spec['encoding']['tooltip'][2]['format'],'.2%')
+            nav_x=charts.time_chart(b.daily,language=language).to_dict(validate=True)['encoding']['x']
+            self.assertEqual(nav_x,{'field':'date','title':t('Date',language),'type':'temporal'})
+            nav_y=charts.time_chart(b.daily,language=language).to_dict(validate=True)['encoding']['y']
+            self.assertNotIn('scale',nav_y)
+            self.assertEqual(nav_y['axis'],{'format':'.1f'})
+        assert_frame_equal(b.daily,before,check_exact=True)
+
     def test_deployment_artifact_bytes_match_git_main(self):
         for path in (PROJECT_ROOT/'dashboard/data').iterdir():
             saved=subprocess.check_output(['git','show',f'HEAD:{path.relative_to(PROJECT_ROOT)}'],cwd=PROJECT_ROOT)
