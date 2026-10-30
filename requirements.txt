@@ -3,3 +3,6 @@ pandas==3.1.0
 numpy==2.5.4
 yfinance==1.7.0
 pyarrow==26.0.0
+# Phase 9 presentation only; prior quantitative dependencies remain unchanged.
+streamlit==1.66.1
+altair==6.2.1
