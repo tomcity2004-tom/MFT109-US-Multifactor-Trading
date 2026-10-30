@@ -21,9 +21,11 @@ Phase 7 adds predefined one-at-a-time sensitivity tables;
 see [the sensitivity guide](docs/PHASE7_SENSITIVITY_ANALYSIS.md).
 Phase 8 adds offline end-to-end, reproducibility and approved-baseline regression
 checks; see [the validation report](docs/PHASE8_TESTING_VALIDATION.md).
-The approved-cache validation passed all 350 tests, including 30 Phase 8 tests;
-the implementation is awaiting review.
-Unrestricted optimization and dashboard logic are not implemented.
+The Phase 8 approved-cache validation passed all 350 tests, including 30 Phase 8 tests.
+Phase 9 adds a five-page Streamlit presentation of reviewed results;
+see [the dashboard guide](docs/PHASE9_STREAMLIT_DASHBOARD.md).
+All 385 tests pass, including 35 dashboard/deployment tests; Phase 9 is awaiting review.
+Unrestricted optimization is not implemented.
 See [the data pipeline guide](docs/DATA_PIPELINE.md) for commands and data policies,
 and [the validation record](docs/PHASE1_VALIDATION.md) for live results and limitations.
 
@@ -59,6 +61,24 @@ python -m mft109.data.pipeline --refresh             # prices only, fixed snapsh
 Review data-quality reports in `data/processed/`. Cached histories are ignored by
 Git; the small fixed-universe CSV and provenance metadata can be versioned.
 
+## Dashboard
+
+From the repository root, with dependencies installed (no local market cache required):
+
+```bash
+.venv/bin/python -m streamlit run dashboard/Home.py
+```
+
+The dashboard reads the small, versionable presentation artifacts in `dashboard/data/`
+without market-data downloads or new backtests. Formation-date and sensitivity controls change the displayed view only.
+Missing approved artifacts produce a clear error; see the dashboard guide for
+required files, offline regeneration, Community Cloud deployment and limitations.
+
+For Streamlit Community Cloud, select `main` after the approved merge and set
+Main file path to `dashboard/Home.py`. Grant Streamlit access to this private repository.
+The explicit offline export command is `python -m dashboard.export_data`; it requires
+the approved local research data and is never executed by the application.
+
 ## Directory guide
 
 | Path | Purpose |
@@ -78,12 +98,12 @@ Git; the small fixed-universe CSV and provenance metadata can be versioned.
 | `outputs/{baseline,optimization}/` | Separate generated result destinations; contents ignored |
 | `tests/` | Standard-library unittest checks; quantitative tests added with implementation |
 | `notebooks/` | Later exploratory and academic analysis notebooks |
-| `dashboard/` | Reserved for Phase 9 Streamlit presentation; no dashboard implemented |
+| `dashboard/` | Streamlit pages and reusable presentation components |
 
 Configuration, data, raw-factor, factor-processing, and ranking modules are
 implemented along with portfolio, backtesting, benchmark and performance metrics.
-Controlled sensitivity analysis is also implemented. Descriptive data analysis
-and dashboard components remain placeholders.
+Controlled sensitivity analysis and the presentation dashboard are implemented.
+Descriptive data analysis remains a placeholder.
 Use reusable core modules for future notebook and dashboard integration.
 
 ## Baseline and research boundaries
@@ -113,7 +133,7 @@ optimization results remain separate.
 
 ## Next phase
 
-Review Phase 8 before proceeding. An approved [FISV source-data revision](docs/FISV_DATA_REVISION.md)
+Review Phase 9 before proceeding. An approved [FISV source-data revision](docs/FISV_DATA_REVISION.md)
 resolves two previously blocked scenarios; all 21 revised-data runs complete.
 Baseline methodology is unchanged, but revised-data results differ from the
-preserved original results. Phase 9 and dashboard implementation have not begun.
+preserved original results. Phase 10 has not begun.
