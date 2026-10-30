@@ -2,6 +2,7 @@
 
 import pandas as pd
 import streamlit as st
+from dashboard.components.i18n import t
 
 from mft109.visualization.dashboard_data import (
     DashboardBundle, DashboardDataError, PortfolioView, bundle_signature,
@@ -19,13 +20,15 @@ def cached_portfolio(formation: str, signature: tuple) -> PortfolioView:
     return portfolio_view(cached_bundle(signature), pd.Timestamp(formation))
 
 
-def load_or_stop() -> tuple[DashboardBundle, tuple]:
+def load_or_stop(language: str = "en") -> tuple[DashboardBundle, tuple]:
     try:
         signature = bundle_signature()
-        with st.spinner("Loading reviewed project results…"):
+        with st.spinner(t("Loading reviewed project results…", language)):
             return cached_bundle(signature), signature
     except DashboardDataError as error:
-        st.error("Reviewed project data could not be loaded. No results have been substituted.")
-        st.warning(str(error))
-        st.caption("Restore the approved tracked dashboard/data deployment artifacts. See docs/PHASE9_STREAMLIT_DASHBOARD.md.")
+        st.error(t("Reviewed project data could not be loaded. No results have been substituted.", language))
+        st.warning(t("Required deployment data are missing or inconsistent.", language))
+        with st.expander(t("Technical diagnostic (original message)", language)):
+            st.code(str(error))
+        st.caption(t("Restore the approved tracked dashboard/data deployment artifacts. See docs/PHASE9_STREAMLIT_DASHBOARD.md.", language))
         st.stop()
