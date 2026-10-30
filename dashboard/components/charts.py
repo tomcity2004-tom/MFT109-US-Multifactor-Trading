@@ -16,11 +16,16 @@ def time_chart(daily: pd.DataFrame, *, drawdown: bool = False, language: str = "
     data = daily[["date", *columns]].rename(columns=columns)
     title = "Drawdown from running peak" if drawdown else "Multi-Factor Strategy vs SPY Buy-and-Hold"
     value_title = t("Drawdown" if drawdown else "Normalized NAV", language)
+    y = alt.Y("Value:Q", title=value_title,
+              axis=alt.Axis(format=".0%" if drawdown else ".1f"))
+    if drawdown:
+        # Display padding only: retain the original non-positive daily values.
+        y.scale = alt.Scale(domain=[-0.40, 0.05], nice=False)
+        y.axis = alt.Axis(format=".0%", values=[tick / 100 for tick in range(-40, 6, 5)])
     return (alt.Chart(data).transform_fold(list(columns.values()), as_=["Series", "Value"])
             .mark_line(strokeWidth=2.2).encode(
                 x=alt.X("date:T", title=t("Date", language)),
-                y=alt.Y("Value:Q", title=value_title,
-                        axis=alt.Axis(format=".0%" if drawdown else ".1f")),
+                y=y,
                 color=alt.Color("Series:N", scale=_colors(language), title=None),
                 tooltip=[alt.Tooltip("date:T", title=t("Date", language), format="%Y-%m-%d"),
                          alt.Tooltip("Series:N", title=t("Series", language)),
