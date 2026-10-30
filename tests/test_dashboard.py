@@ -208,18 +208,18 @@ class StreamlitSmokeTests(unittest.TestCase):
         app=self.app('pages/2_Portfolio.py')
         self.assertGreater(len(app.info),0)
         self.assertTrue(app.dataframe[0].value['Target weight'].eq('—').all())
-        app.selectbox[0].select_index(118).run()
+        app.selectbox(key="formation_date_portfolio").select_index(118).run()
         self.assertEqual(len(app.exception),0)
         self.assertTrue(app.dataframe[0].value['Target weight'].eq('5.00%').all())
 
     def test_factors_page_executes(self):
         app=self.app('pages/3_Factors.py')
-        self.assertEqual(len(app.selectbox),1)
+        self.assertEqual(len(app.selectbox),2)
 
     def test_sensitivity_controls_display_only_predefined_groups(self):
         app=self.app('pages/4_Sensitivity.py')
-        self.assertEqual(len(app.selectbox[0].options),6)
-        app.selectbox[0].select_index(5).run()
+        self.assertEqual(len(app.selectbox(key="sensitivity_group").options),6)
+        app.selectbox(key="sensitivity_group").select_index(5).run()
         self.assertEqual(len(app.exception),0)
         self.assertEqual(len(app.dataframe[0].value),5)
 

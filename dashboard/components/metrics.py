@@ -2,9 +2,10 @@
 
 import streamlit as st
 from dashboard.components.formatting import number
+from dashboard.components.i18n import t
 
 
-def kpi_cards(bundle) -> None:
+def kpi_cards(bundle, language: str = "en") -> None:
     metrics = bundle.summary.set_index("Metric")
     final = bundle.daily.iloc[-1]
     rows = [
@@ -19,4 +20,4 @@ def kpi_cards(bundle) -> None:
     ]
     for row in rows:
         for column, (label, value, kind) in zip(st.columns(4), row, strict=True):
-            column.metric(label, number(value, kind), border=True)
+            column.metric(t(label, language), number(value, kind), border=True)

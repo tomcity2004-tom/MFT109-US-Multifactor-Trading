@@ -24,7 +24,10 @@ checks; see [the validation report](docs/PHASE8_TESTING_VALIDATION.md).
 The Phase 8 approved-cache validation passed all 350 tests, including 30 Phase 8 tests.
 Phase 9 adds a five-page Streamlit presentation of reviewed results;
 see [the dashboard guide](docs/PHASE9_STREAMLIT_DASHBOARD.md).
-All 385 tests pass, including 35 dashboard/deployment tests; Phase 9 is awaiting review.
+Phase 9 includes 35 dashboard/deployment tests.
+Phase 9.1 adds an English / 繁體中文 sidebar selector and shared presentation translations;
+see [the bilingual dashboard guide](docs/PHASE9_1_BILINGUAL_DASHBOARD.md).
+All 403 tests pass, including 18 bilingual tests; the enhancement is awaiting review.
 Unrestricted optimization is not implemented.
 See [the data pipeline guide](docs/DATA_PIPELINE.md) for commands and data policies,
 and [the validation record](docs/PHASE1_VALIDATION.md) for live results and limitations.
@@ -133,7 +136,7 @@ optimization results remain separate.
 
 ## Next phase
 
-Review Phase 9 before proceeding. An approved [FISV source-data revision](docs/FISV_DATA_REVISION.md)
+Review Phase 9.1 before proceeding. An approved [FISV source-data revision](docs/FISV_DATA_REVISION.md)
 resolves two previously blocked scenarios; all 21 revised-data runs complete.
 Baseline methodology is unchanged, but revised-data results differ from the
 preserved original results. Phase 10 has not begun.
