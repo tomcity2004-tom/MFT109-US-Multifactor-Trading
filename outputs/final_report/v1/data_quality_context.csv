@@ -1,0 +1,9 @@
+Topic,Evidence / treatment,Evidence status,Source
+Fixed universe,"503 securities; fixed current snapshot, not historical membership",Current approved methodology,data/raw/sp500_constituents.csv; docs/PHASE8_TESTING_VALIDATION.md
+Available histories,500 stock histories plus SPY in reviewed cache validation,Reviewed Phase 8 evidence; not a fresh vendor audit,docs/PHASE8_TESTING_VALIDATION.md
+Unavailable symbols,"FDXF, HONA, VYLR retained; no requested-period history or substitutions",Reviewed missing-data treatment,docs/PHASE1_1_DATA_GAP_REVIEW.md; docs/PHASE8_TESTING_VALIDATION.md
+Leading coverage gaps,43 leading-gap histories in the Phase 1.1 review; eligibility depends on complete factor windows,Historical classification,docs/PHASE1_1_DATA_GAP_REVIEW.md
+FISV gap,2025-11-12 observation restored by approved Yahoo revision; three other Volume observations revised,Current revised-data provenance,docs/FISV_DATA_REVISION.md
+Older quality report,data/processed/data_quality.json predates the FISV revision; its missing-price warning is historical,Historical local report; not current revised-cache evidence,docs/PHASE1_1_DATA_GAP_REVIEW.md; docs/FISV_DATA_REVISION.md
+Return analysis,2514 source rows; exclude initial accounting anchor; 2513 paired actual returns with zero missing-pair exclusions,Approved Phase 10A sample,docs/PHASE10A_DATA_ANALYSIS.md
+Volume limitation,yfinance may normalize upstream null Volume to zero; returned completeness is not proof of original source completeness,Provider limitation retained,docs/PHASE2_RAW_FACTORS.md

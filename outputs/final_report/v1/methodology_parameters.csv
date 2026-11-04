@@ -1,0 +1,43 @@
+Parameter,Value,Convention
+universe,"current S&P 500 constituents, fixed throughout backtest",mft109.config.BASELINE
+data_source,Yahoo Finance / yfinance,mft109.config.BASELINE
+data_frequency,daily,mft109.config.BASELINE
+download_start,2015-01-01,mft109.config.BASELINE
+download_end,2025-12-31,mft109.config.BASELINE
+backtest_start,2016-01-01,mft109.config.BASELINE
+backtest_end,2025-12-31,mft109.config.BASELINE
+benchmark,SPY,mft109.config.BASELINE
+price_basis,adjusted,mft109.config.BASELINE
+volume_basis,Yahoo Finance reported Volume,mft109.config.BASELINE
+momentum_lookback_days,252,mft109.config.BASELINE
+momentum_skip_days,21,mft109.config.BASELINE
+volatility_lookback_days,60,mft109.config.BASELINE
+liquidity_lookback_days,20,mft109.config.BASELINE
+reversal_lookback_days,20,mft109.config.BASELINE
+trading_days_per_year,252,mft109.config.BASELINE
+momentum_weight,0.25,mft109.config.BASELINE
+low_volatility_weight,0.25,mft109.config.BASELINE
+liquidity_weight,0.25,mft109.config.BASELINE
+reversal_weight,0.25,mft109.config.BASELINE
+standardization,cross-sectional Z-score,mft109.config.BASELINE
+require_all_four_factors,True,mft109.config.BASELINE
+top_n,20,mft109.config.BASELINE
+portfolio_weighting,equal weight,mft109.config.BASELINE
+rebalance_frequency,monthly,mft109.config.BASELINE
+signal_timing,month-end information,mft109.config.BASELINE
+execution_timing,next eligible trading day,mft109.config.BASELINE
+transaction_cost_rate,0.001,mft109.config.BASELINE
+risk_free_rate,0.0,mft109.config.BASELINE
+initial_capital_usd,100000.0,mft109.config.BASELINE
+initial_nav,1.0,mft109.config.BASELINE
+sharpe_definition,Annualized Return / Annualized Volatility,mft109.config.BASELINE
+market,U.S. Equity Market,Locked methodology; see FINAL_METHODOLOGY.md
+warm_up_period,2015-01-01 through 2015-12-31,Locked methodology; see FINAL_METHODOLOGY.md
+universe_snapshot_rows,503,Locked methodology; see FINAL_METHODOLOGY.md
+cross_sectional_zscore_ddof,0,Locked methodology; see FINAL_METHODOLOGY.md
+historical_volatility_ddof,1,Locked methodology; see FINAL_METHODOLOGY.md
+turnover_definition,0.5 * sum(abs(target_weight - drifted_pre_rebalance_weight)); include cash,Locked methodology; see FINAL_METHODOLOGY.md
+execution_valuation_price,Next eligible SPY session adjusted close; new holdings earn after that close,Locked methodology; see FINAL_METHODOLOGY.md
+missing_factor_rule,All four finite factors required; no imputation or partial reweighting,Locked methodology; see FINAL_METHODOLOGY.md
+ranking_tie_break,"CompositeScore descending, ticker ascending; unique sequential ranks",Locked methodology; see FINAL_METHODOLOGY.md
+forward_fill,Never,Locked methodology; see FINAL_METHODOLOGY.md

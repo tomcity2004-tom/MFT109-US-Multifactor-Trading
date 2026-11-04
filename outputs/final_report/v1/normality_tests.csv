@@ -1,0 +1,3 @@
+Series,Test,Count,Statistic,p-value,Log p-value,Alpha,Conclusion,p-value note
+Strategy,Jarque–Bera,2513,10764.357408663589,0.0,-5382.1787043317945,0.05,Reject H0,"Floating-point underflow, not exact zero; see Log p-value"
+SPY,Jarque–Bera,2513,22673.307196894355,0.0,-11336.653598447178,0.05,Reject H0,"Floating-point underflow, not exact zero; see Log p-value"
