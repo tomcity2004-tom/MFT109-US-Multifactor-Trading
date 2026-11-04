@@ -1,0 +1,4 @@
+# Optional offline Phase 10A diagnostics; Streamlit deployment requirements stay unchanged.
+-r requirements.txt
+scipy==1.18.1
+matplotlib==3.11.2

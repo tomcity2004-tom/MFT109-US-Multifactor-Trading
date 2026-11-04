@@ -1,142 +1,136 @@
 # MFT109 US Multi-Factor Trading Project
 
-Academic U.S. equity stock-selection and backtesting project for the MFT109
-Financial Algorithmic Trading course.
+Academic Python project for the **MFT109 Financial Algorithmic Trading** course:
+U.S. equity multi-factor stock selection, backtesting and comparison with SPY
+Buy-and-Hold. Validated Phase 0–10A research is consolidated into a versioned
+Phase 10B report-material package, awaiting review. The final course report and
+PowerPoint are separate deliverables and have not been generated.
 
-[PROJECT_REQUIREMENTS.md](PROJECT_REQUIREMENTS.md) is the primary research and
-methodology specification. [AGENTS.md](AGENTS.md) defines development rules.
+## Strategy and validated results
 
-Phase 1 implements data acquisition, validation, conservative cleaning, and caching.
-Phase 2 adds the four raw factors; see [the raw-factor guide](docs/PHASE2_RAW_FACTORS.md).
-Phase 3 adds eligibility, cross-sectional standardization, and composite scoring;
-see [the scoring guide](docs/PHASE3_FACTOR_SCORING.md).
-Phase 4 adds monthly ranking and Top 20 selection;
-see [the ranking guide](docs/PHASE4_RANKING_SELECTION.md).
-Phase 5 adds portfolio construction, adjusted-close execution, turnover-based
-costs, daily accounting and SPY Buy-and-Hold;
-see [the portfolio/backtest guide](docs/PHASE5_PORTFOLIO_BACKTEST.md).
-Phase 6 adds performance metrics, daily drawdowns and calendar-year returns;
-see [the performance guide](docs/PHASE6_PERFORMANCE_ANALYSIS.md).
-Phase 7 adds predefined one-at-a-time sensitivity tables;
-see [the sensitivity guide](docs/PHASE7_SENSITIVITY_ANALYSIS.md).
-Phase 8 adds offline end-to-end, reproducibility and approved-baseline regression
-checks; see [the validation report](docs/PHASE8_TESTING_VALIDATION.md).
-The Phase 8 approved-cache validation passed all 350 tests, including 30 Phase 8 tests.
-Phase 9 adds a five-page Streamlit presentation of reviewed results;
-see [the dashboard guide](docs/PHASE9_STREAMLIT_DASHBOARD.md).
-Phase 9 includes 35 dashboard/deployment tests.
-Phase 9.1 adds an English / 繁體中文 sidebar selector and shared presentation translations;
-see [the bilingual dashboard guide](docs/PHASE9_1_BILINGUAL_DASHBOARD.md).
-All 403 tests pass, including 18 bilingual tests; the enhancement is awaiting review.
-Unrestricted optimization is not implemented.
-See [the data pipeline guide](docs/DATA_PIPELINE.md) for commands and data policies,
-and [the validation record](docs/PHASE1_VALIDATION.md) for live results and limitations.
+A fixed current S&P 500 constituent snapshot is ranked monthly using four
+equally weighted standardized factors: **12–1 month momentum, 60-day low
+volatility, 20-day dollar-volume liquidity, and 20-day short-term reversal**.
+The Top 20 form an equal-weight portfolio, implemented at the next eligible
+session's adjusted close. Costs are 10 bps times actual cash-inclusive turnover.
 
-## Development setup
+Official backtest: **2016–2025**, with 2015 warm-up; initial capital USD 100,000;
+benchmark **SPY Buy-and-Hold**; risk-free rate 0%.
 
-Use Python 3.12 (validated with 3.12.14). From the repository root:
+| Validated metric | Strategy | SPY |
+| --- | ---: | ---: |
+| Final NAV | 6.225346615575381 | 4.002530196823173 |
+| Cumulative return | 522.534662% | 300.253020% |
+| CAGR | 20.126153% | 14.921489% |
+| Annualized volatility | 23.057786% | 18.007274% |
+| Sharpe (CAGR/volatility) | 0.872857 | 0.828637 |
+| Maximum drawdown | -35.452505% | -33.717264% |
+
+Final strategy value: **USD 622,534.6615575381**. This is the current approved
+revised-data baseline. Strategy's higher historical return accompanies greater
+volatility and maximum drawdown; future superiority is not established.
+
+## Documentation and official materials
+
+- [Locked methodology](docs/FINAL_METHODOLOGY.md)
+- [Validated results](docs/FINAL_RESULTS.md)
+- [Limitations](docs/LIMITATIONS.md)
+- [Reproducibility and deployment](docs/REPRODUCIBILITY.md)
+- [Final export index](docs/FINAL_EXPORT_INDEX.md) and [package manifest](outputs/final_report/v1/manifest.json)
+- [Assignment mapping](docs/ASSIGNMENT_MAPPING.md)
+- [Phase 10A statistics](docs/PHASE10A_DATA_ANALYSIS.md) and [Phase 10B record](docs/PHASE10B_FINAL_EXPORTS.md)
+
+[PROJECT_REQUIREMENTS.md](PROJECT_REQUIREMENTS.md) defines the research
+specification; [AGENTS.md](AGENTS.md) defines development rules. Historical phase
+guides remain under `docs/`, including [data processing](docs/DATA_PIPELINE.md),
+[Phase 8 validation](docs/PHASE8_TESTING_VALIDATION.md),
+[FISV revision provenance](docs/FISV_DATA_REVISION.md), and
+[dashboard](docs/PHASE9_STREAMLIT_DASHBOARD.md)/[bilingual usage](docs/PHASE9_1_BILINGUAL_DASHBOARD.md).
+Their historical work-status statements are preserved; the consolidated final
+documents describe the current research state.
+
+## Setup and commands
+
+Use Python 3.12. For research diagnostics, static exports and all tests:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install -r requirements-analysis.txt
+python -m pip check
+```
+
+To explicitly regenerate diagnostic and final-package outputs from tracked
+validated artifacts (no market-data download or new backtest):
+
+```bash
+python -B -m mft109.analysis.data_analysis
+python -B -m mft109.analysis.final_exports
+```
+
+Phase 10A generates ignored diagnostic files. Phase 10B verifies/copies those
+outputs and creates the versionable `outputs/final_report/v1/` package. It never
+silently chooses older results or reruns research. Do not edit exported financial
+values manually. The package includes 2016–2025 annual tables, daily NAV/drawdowns,
+portfolio targets, all six sensitivity groups, statistical tables and static
+figures. See the index for units and provenance.
+
+## Streamlit dashboard
+
+Five pages: Home, Performance, Portfolio, Factors and Sensitivity. The sidebar
+**Language / 語言** selector supports **English / 繁體中文**, preserving language
+across navigation. Financial results are identical in both languages.
+
+```bash
 python -m pip install -r requirements.txt
-python -m unittest discover -s tests -v
-python -c "from mft109.config import BASELINE; print(BASELINE)"
+python -m streamlit run dashboard/Home.py
 ```
 
-Phase 1 uses pinned pandas, NumPy, yfinance, and PyArrow dependencies. The root-level
-package works directly from the repository root without editable installation or
-PYTHONPATH changes. Tests use deterministic fixtures and require no Yahoo access.
-Imports do not download data or create files. Phase 8 integration checks require
-the approved local cache; use
-`MFT109_REQUIRE_APPROVED_CACHE=1 python -B -m unittest discover -s tests -v`
-for a full validation that fails instead of skipping when the cache is absent.
+Official entry point: **dashboard/Home.py**. It reads eleven tracked deployment
+artifacts and requires no local market cache, secrets or live Yahoo requests.
+For Community Cloud, authorize the private GitHub repository, select `main`
+after merge, Python 3.12 and the same Main file path. Analysis dependencies are
+not needed for dashboard-only deployment. See reproducibility guidance for the
+separate full quantitative workflow.
 
-Run the data pipeline explicitly:
+## Testing
+
+After the explicit diagnostic regeneration command, run:
 
 ```bash
-python -m mft109.data.pipeline --universe-only
-python -m mft109.data.pipeline --tickers AAPL BRK-B  # live smoke test with SPY
-python -m mft109.data.pipeline                       # all fixed constituents + SPY
-python -m mft109.data.pipeline --refresh             # prices only, fixed snapshot retained
+MFT109_REQUIRE_APPROVED_CACHE=1 python -B -m unittest discover -s tests -v
+python -B -m pip check
+git diff --check
 ```
 
-Review data-quality reports in `data/processed/`. Cached histories are ignored by
-Git; the small fixed-universe CSV and provenance metadata can be versioned.
+Full integration validation requires the approved ignored stock/SPY cache and
+runs offline. The strict flag fails when that cache is absent; skipped cache
+checks do not establish a reproduced baseline. Presentation and report-package
+inspection remain possible from GitHub alone. Final-export tests require the
+approved Phase 10A outputs; regenerate them explicitly if absent in a clean clone.
+No test or export command should refresh Yahoo data to force a result match.
 
-## Dashboard
-
-From the repository root, with dependencies installed (no local market cache required):
-
-```bash
-.venv/bin/python -m streamlit run dashboard/Home.py
-```
-
-The dashboard reads the small, versionable presentation artifacts in `dashboard/data/`
-without market-data downloads or new backtests. Formation-date and sensitivity controls change the displayed view only.
-Missing approved artifacts produce a clear error; see the dashboard guide for
-required files, offline regeneration, Community Cloud deployment and limitations.
-
-For Streamlit Community Cloud, select `main` after the approved merge and set
-Main file path to `dashboard/Home.py`. Grant Streamlit access to this private repository.
-The explicit offline export command is `python -m dashboard.export_data`; it requires
-the approved local research data and is never executed by the application.
-
-## Directory guide
+## Repository structure
 
 | Path | Purpose |
 | --- | --- |
-| `mft109/config.py` | Immutable approved baseline settings and repository-relative paths |
-| `mft109/data/` | Acquisition, validation, cleaning, and cache management |
-| `mft109/factors/` | Four independent factor modules |
-| `mft109/processing/` | Cross-sectional standardization and composite scoring |
-| `mft109/ranking/` | Stock ranking and Top N selection |
-| `mft109/portfolio/` | Equal-weight portfolio construction |
-| `mft109/backtesting/` | Engine, execution timing, turnover, and transaction costs |
-| `mft109/benchmark/` | SPY Buy-and-Hold comparison |
-| `mft109/analysis/` | Performance, descriptive statistics, and normality analysis |
-| `mft109/optimization/` | Optimization and sensitivity analysis |
-| `mft109/visualization/` | Reusable plotting independent of dashboard files |
-| `data/{raw,processed,cache}/` | Local artifacts; only placeholders and fixed-universe inputs are versioned |
-| `outputs/{baseline,optimization}/` | Separate generated result destinations; contents ignored |
-| `tests/` | Standard-library unittest checks; quantitative tests added with implementation |
-| `notebooks/` | Later exploratory and academic analysis notebooks |
-| `dashboard/` | Streamlit pages and reusable presentation components |
+| `mft109/config.py` | Locked baseline configuration |
+| `mft109/data/` | Acquisition, validation, cleaning and cache handling |
+| `mft109/factors/`, `processing/`, `ranking/` | Raw factors, Z-scores/composite and deterministic Top N selection |
+| `mft109/portfolio/`, `backtesting/`, `benchmark/` | Targets, execution, drift, costs, NAV and SPY |
+| `mft109/analysis/` | Validated performance, return diagnostics and explicit final exports |
+| `mft109/optimization/` | Fixed one-at-a-time sensitivity; no unrestricted optimizer |
+| `dashboard/` | Bilingual presentation, tracked deployment data and offline maintenance export |
+| `outputs/final_report/v1/` | Versioned, report-ready source materials and manifest |
+| `outputs/final_analysis/` | Ignored reproducible Phase 10A diagnostics |
+| `data/`, other `outputs/` | Fixed universe plus ignored caches/historical generated research data |
+| `docs/`, `tests/`, `notebooks/` | Methodology/evidence, automated validation and optional exploration |
 
-Configuration, data, raw-factor, factor-processing, and ranking modules are
-implemented along with portfolio, backtesting, benchmark and performance metrics.
-Controlled sensitivity analysis and the presentation dashboard are implemented.
-Descriptive data analysis remains a placeholder.
-Use reusable core modules for future notebook and dashboard integration.
+## Academic disclaimer
 
-## Baseline and research boundaries
-
-The configuration records the fixed current S&P 500 universe, daily Yahoo Finance
-data, 2015 warm-up, 2016–2025 official backtest, four equally weighted factors,
-Top 20 equal-weight portfolio, monthly formation and next-trading-day execution,
-10 bps turnover-based costs, SPY benchmark, zero risk-free rate, USD 100,000
-initial capital, and normalized NAV of 1.0. Current membership introduces
-survivorship bias and must be disclosed. Warm-up observations are excluded from
-performance statistics.
-
-Use consistent adjusted prices with Yahoo Finance reported Volume. Do not assume
-an `Adj Close` column exists. Require all four valid factors for ranking and never
-fabricate missing values. Configuration dates are inclusive research boundaries;
-the provider adapter adds one day to the exclusive yfinance end date.
-
-Adjusted prices and conservative missing-data handling are explicit in the data
-pipeline. Raw volatility uses sample standard deviation (`ddof=1`). Execution-price
-conventions and cash-inclusive turnover are documented in the Phase 5 guide.
-Performance-statistic conventions are documented in the Phase 6 guide.
-The approved Phase 7 scenarios are fixed in the sensitivity guide; no unrestricted
-optimization grid or automatic best-parameter selection is provided.
-Resolve material methodological decisions explicitly before
-implementing the affected phase. Baseline settings must not be silently changed;
-optimization results remain separate.
-
-## Next phase
-
-Review Phase 9.1 before proceeding. An approved [FISV source-data revision](docs/FISV_DATA_REVISION.md)
-resolves two previously blocked scenarios; all 21 revised-data runs complete.
-Baseline methodology is unchanged, but revised-data results differ from the
-preserved original results. Phase 10 has not begun.
+Using current constituents across history introduces **survivorship bias**.
+Yahoo data can be revised; execution and costs are simplified, while taxes and
+market impact are not modeled. Historical
+sensitivity and normality diagnostics are not evidence of future profitability.
+This is academic research, **not investment advice**. No final report, PPT or
+submission archive is created by the packaging workflow.

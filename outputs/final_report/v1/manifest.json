@@ -1,0 +1,191 @@
+{
+  "data_quality_context": "Historical Phase 1 reports predate approved FISV revision; no new vendor audit was performed.",
+  "documentation": [
+    "docs/FINAL_RESULTS.md",
+    "docs/FINAL_METHODOLOGY.md",
+    "docs/LIMITATIONS.md",
+    "docs/REPRODUCIBILITY.md",
+    "docs/FINAL_EXPORT_INDEX.md",
+    "docs/ASSIGNMENT_MAPPING.md",
+    "docs/PHASE10B_FINAL_EXPORTS.md"
+  ],
+  "export_version": "v1",
+  "exporter_sha256": "436483d15dff609ef48a111bf69628ca7f38935b5b6f5c730d415befbc36b4b9",
+  "files": {
+    "annual_returns.csv": {
+      "bytes": 466,
+      "sha256": "13859a692a1a051681e87089f0a55abe67a8f4a65ec79db0199e1585d0ad575e"
+    },
+    "baseline_daily.csv": {
+      "bytes": 370415,
+      "sha256": "141ea1ac527a7562a82eb0c8b66ac57f4e40fc4e0d446567283788bc6e31e3de"
+    },
+    "data_quality_context.csv": {
+      "bytes": 1557,
+      "sha256": "da0c5325f4296339e8f013cfbaa66660fa20adf23949bace9695540da82b66d8"
+    },
+    "descriptive_statistics.csv": {
+      "bytes": 512,
+      "sha256": "46d73dfb0de4bdfa40bee577d7f42251e1a7be12a12bd072545e07e015fbf7df"
+    },
+    "factor_definitions.csv": {
+      "bytes": 1272,
+      "sha256": "ea5b38b45c3ff31dbda26e4abcc38105287bd2c96a907061850c8a286b098409"
+    },
+    "figures/annual_returns_comparison.png": {
+      "bytes": 100815,
+      "sha256": "0bfd56c8877217d784e6fc3ae60475ed1a45b68ad95d21b00a00af86a1c0ba75"
+    },
+    "figures/drawdown_comparison.png": {
+      "bytes": 336238,
+      "sha256": "ab45c1b2216cd3fc8a23848f75aabacc175e33b889e96ebc025c5b5d8a0f4195"
+    },
+    "figures/nav_comparison.png": {
+      "bytes": 217789,
+      "sha256": "c4d51e96ffa2e4513e133da552f1c67960b6161cf86f2d00842797947b9e6645"
+    },
+    "figures/sensitivity_factor_weights.png": {
+      "bytes": 213745,
+      "sha256": "ceceb2a60f1162285d47ff65701b5f0b4be4e3d94ffeb32f6441de1030450ecd"
+    },
+    "figures/sensitivity_rebalance_frequency.png": {
+      "bytes": 167838,
+      "sha256": "cc8ce4377b5dfe244c54daa9133320172f6bb8e7f172daeee115118c70bb3037"
+    },
+    "figures/sensitivity_reversal_window.png": {
+      "bytes": 174199,
+      "sha256": "2def4fe432fbb3b58456fb943324b0f72f6d314f35ba1a4f168b3022811afb9e"
+    },
+    "figures/sensitivity_top_n.png": {
+      "bytes": 164296,
+      "sha256": "e567a8a40665404767495f2a533f5124ba18915d6605e3a86943cf03ebce07f7"
+    },
+    "figures/sensitivity_transaction_cost_bps.png": {
+      "bytes": 172374,
+      "sha256": "727ca505264117d86ebb3a5aeced17172478e61e05052daf896b4e71da11c207"
+    },
+    "figures/sensitivity_volatility_window.png": {
+      "bytes": 174166,
+      "sha256": "92a95ae5bbbd932da3c087d0dacaf1ceaeb681adeccd305808bf5a55e7db6640"
+    },
+    "figures/spy_qq_plot.png": {
+      "bytes": 157042,
+      "sha256": "56b05cb5661a873da98de5f1b2f1c5b78500605df48f04311381a8549c9939a1"
+    },
+    "figures/spy_return_distribution.png": {
+      "bytes": 132336,
+      "sha256": "fd906aa5af2f1cb31687ec286cff47ed6e2027ba02673b27d9190294001794b7"
+    },
+    "figures/strategy_qq_plot.png": {
+      "bytes": 161187,
+      "sha256": "4dcfcbf8fb349d82848032fc05187ca9da4403ceca47138e0693f3fdec0d20aa"
+    },
+    "figures/strategy_return_distribution.png": {
+      "bytes": 134147,
+      "sha256": "cb6a3d1eba542b1425d44c88c4736e9449c5ee24c138d0fd0795e7559e6cd2cc"
+    },
+    "methodology_parameters.csv": {
+      "bytes": 2688,
+      "sha256": "ab474a42216a89f1d8e92245d17f547810670dc92253ae30d6361602a5ebe555"
+    },
+    "normality_tests.csv": {
+      "bytes": 365,
+      "sha256": "3c75566b35c5bab4509708bf4607d3ceac0bae2fb457c5298bed88173dca0675"
+    },
+    "performance_summary.csv": {
+      "bytes": 382,
+      "sha256": "8fb09ecf76855aaa04d2039ebbc66158547f39eccd77f633a1fee825ba3a5d4a"
+    },
+    "phase10a_interpretation.md": {
+      "bytes": 2634,
+      "sha256": "e2991966635d84996e364ef3f4d2a0a999d1b84047700d5cea9dd5b28e622faa"
+    },
+    "phase10a_metadata.json": {
+      "bytes": 4215,
+      "sha256": "e4ec4ab322560299342957a8945717f44adeda1d3934252307d8f2cb3eb63006"
+    },
+    "portfolio_snapshots.csv": {
+      "bytes": 343831,
+      "sha256": "74e9db34038beddd2731dcb0d9d54b56401ae18c322f72cedf4cf33f59671534"
+    },
+    "sensitivity_summary.csv": {
+      "bytes": 5973,
+      "sha256": "ca5d0dd00f48b5c04cb9c5108ac974a0b0e89daa1703afec4d40a37d98424777"
+    }
+  },
+  "maximum_drawdown": {
+    "SPY": -0.3371726378600285,
+    "Strategy": -0.35452504758611847
+  },
+  "methodology_version": {
+    "sha256": "215284c6569198f80bf39ce782007122a8a4c4b05f11904d08bb518fba9b43f0",
+    "specification": "PROJECT_REQUIREMENTS.md sections 1\u201321"
+  },
+  "package_kind": "Validated academic report source materials, not final report/PPT",
+  "phase10a_provenance": "phase10a_metadata.json describes the original Phase 10A folder; this manifest inventories the final package.",
+  "phase10a_sample": {
+    "aligned_observations": 2513,
+    "analysis_first_date": "2016-01-05",
+    "analysis_last_date": "2025-12-31",
+    "anchor_rule": "Exclude only initial synthetic zero anchor, consistent with Phase 6; retain genuine later zeros.",
+    "excluded_initial_anchor_date": "2016-01-04",
+    "excluded_missing_dates": [],
+    "missing_value_rule": "Pairwise complete dates only; no fill, clipping or imputation. Infinities fail.",
+    "official_period": [
+      "2016-01-01",
+      "2025-12-31"
+    ],
+    "pairwise_missing_rows_excluded": 0,
+    "return_units": "Daily simple returns stored as decimals; 0.01 = 1%.",
+    "source_first_date": "2016-01-04",
+    "source_last_date": "2025-12-31",
+    "source_rows": 2514,
+    "spy_observations": 2513,
+    "strategy_observations": 2513
+  },
+  "reproducibility": "No generation timestamp; repeat export with identical inputs/code/software is byte-identical. Source checkpoint is fixed, not current HEAD.",
+  "sensitivity": "Six one-at-a-time groups; 21 reported rows including six identical baseline rows; no new baseline selection.",
+  "software": {
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.4",
+    "pandas": "3.1.0",
+    "pyarrow": "26.0.0"
+  },
+  "source_checkpoint_commit": "fcb2633b5dd5271774a281d271f87474cb3febe2",
+  "source_data_version": "fisv_revision_20261029T170124Z",
+  "sources_sha256": {
+    "PROJECT_REQUIREMENTS.md": "215284c6569198f80bf39ce782007122a8a4c4b05f11904d08bb518fba9b43f0",
+    "dashboard/data/baseline_annual_returns.csv": "1b51f4a33fd16c7680bead3e4a13169a6e9a564a61a1efc1ef65da0da87e1c2a",
+    "dashboard/data/baseline_daily.parquet": "9344f37f2b6a7b048fede1540c60aecd728fc3b37789ee800f41095f3efade0d",
+    "dashboard/data/baseline_performance.csv": "e02e5d90fab1aa74a2b30f47ef2540297abfdbc8a2078a55c5d7ee51d9804f69",
+    "dashboard/data/baseline_selected.parquet": "884aa04b2f7131f4ea062747ededb907d47e381358851d52db36e514079456ab",
+    "dashboard/data/manifest.json": "81a9fa6b747cd0a0652fcaebae5c046522dff80fba2f65644f5031bb471ab34e",
+    "dashboard/data/phase7_factor_weights.csv": "bbe3e1e36e4441bfc098280368685e1d5e1ba3ad43362cfc12fb1db4eb39b12c",
+    "dashboard/data/phase7_rebalance_frequency.csv": "ac291d0e0e86a5cc3465d394dd3eba7710d5a374dc2a6aa05cee5f4460b0dd51",
+    "dashboard/data/phase7_reversal_window.csv": "1e558a2c8db5fd0e6967f78ebb74078d6e88b4e29b9e8e16cf4f63be4591ad3b",
+    "dashboard/data/phase7_top_n.csv": "85c4147d4a0d24bacc7e106895b759667cb98f23ba80762c8656b1233bbb47aa",
+    "dashboard/data/phase7_transaction_cost_bps.csv": "47f1f31cd48786a10797248047526d23c9db2448c340bb9ccbf5e3b8d6c551ae",
+    "dashboard/data/phase7_volatility_window.csv": "07b9cd333b76e45267199a867cfde0b3190719cdc1913d31b19641a9b964d715",
+    "data/raw/sp500_constituents.csv": "1ea0fbbd0b0981f9da91694f2b3abbcb31538ade3f5e9729d53beff767b5dd40",
+    "docs/FISV_DATA_REVISION.md": "35bf41faa7a9dfa4ea3bd2ef60b752ac698dd6e699895e7c1f2e0b95b93769e2",
+    "docs/PHASE1_1_DATA_GAP_REVIEW.md": "044140b41db66e5720284060eea0211c8d39bb76e33a7e5507d43f449b0f8fd2",
+    "docs/PHASE2_RAW_FACTORS.md": "a5d84e5ce29b1dc7acb6ef3e8bb74df36b4b3fb5bcc4e2181c1f2c84bc8fdcc7",
+    "docs/PHASE8_TESTING_VALIDATION.md": "0a7696341dba1fe70d662ceec89296460ee6d6d36d0b048ac01513cbc621fd35",
+    "mft109/analysis/data_analysis.py": "a08f18100b0be482b8ac1110d96ea47a61563d88875182256c8f23e7a34ba4ed",
+    "mft109/config.py": "ccc0d9a81ba374c7025df9a9a9749032c4a4fd38cb678c6dcd7aa650275ffcc5",
+    "outputs/final_analysis/analysis_metadata.json": "e4ec4ab322560299342957a8945717f44adeda1d3934252307d8f2cb3eb63006",
+    "outputs/final_analysis/analysis_summary.md": "e2991966635d84996e364ef3f4d2a0a999d1b84047700d5cea9dd5b28e622faa",
+    "outputs/final_analysis/descriptive_statistics.csv": "46d73dfb0de4bdfa40bee577d7f42251e1a7be12a12bd072545e07e015fbf7df",
+    "outputs/final_analysis/normality_tests.csv": "3c75566b35c5bab4509708bf4607d3ceac0bae2fb457c5298bed88173dca0675",
+    "outputs/final_analysis/spy_qq_plot.png": "56b05cb5661a873da98de5f1b2f1c5b78500605df48f04311381a8549c9939a1",
+    "outputs/final_analysis/spy_return_distribution.png": "fd906aa5af2f1cb31687ec286cff47ed6e2027ba02673b27d9190294001794b7",
+    "outputs/final_analysis/strategy_qq_plot.png": "4dcfcbf8fb349d82848032fc05187ca9da4403ceca47138e0693f3fdec0d20aa",
+    "outputs/final_analysis/strategy_return_distribution.png": "cb6a3d1eba542b1425d44c88c4736e9449c5ee24c138d0fd0795e7559e6cd2cc"
+  },
+  "units": "Returns/drawdowns/weights in CSV are decimals; Sharpe/skewness/kurtosis are dimensionless; strategy value USD; SPY USD blank (not supplied).",
+  "validated_baseline_endpoints": {
+    "portfolio_value_usd": 622534.6615575381,
+    "spy_nav": 4.002530196823173,
+    "strategy_nav": 6.225346615575381
+  }
+}

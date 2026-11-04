@@ -236,3 +236,6 @@ __marimo__/
 # Small fixed-universe research inputs are versionable; market caches stay ignored.
 !/data/raw/sp500_constituents.csv
 !/data/raw/sp500_constituents.metadata.json
+
+# Reproducible Phase 10A statistical tables and static figures
+/outputs/final_analysis/
