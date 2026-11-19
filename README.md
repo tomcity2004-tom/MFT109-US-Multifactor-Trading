@@ -134,3 +134,22 @@ market impact are not modeled. Historical
 sensitivity and normality diagnostics are not evidence of future profitability.
 This is academic research, **not investment advice**. No final report, PPT or
 submission archive is created by the packaging workflow.
+
+## Trade history
+
+The **Trade History / 交易紀錄** page displays engine-derived stock transactions,
+including retained-stock rebalancing. Filter by execution date, ticker and BUY /
+SELL; download the filtered CSV. Launch with `streamlit run dashboard/Home.py`.
+The deployed app reads tracked artifacts and needs no market cache.
+
+To explicitly reproduce the official trades from **approved cached data**:
+
+```bash
+python -B -m mft109.backtesting.export
+```
+
+This verifies unchanged daily results and exports
+`outputs/final_report/v1/trade_log.csv`, plus checksum-validated dashboard support.
+The log uses academic adjusted-close prices and fractional units, not actual
+market fills. Its cost allocations describe fees already charged by the engine;
+never deduct them again. See [trade-history documentation](docs/TRADE_HISTORY.md).

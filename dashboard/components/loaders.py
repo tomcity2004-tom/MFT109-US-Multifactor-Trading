@@ -32,3 +32,9 @@ def load_or_stop(language: str = "en") -> tuple[DashboardBundle, tuple]:
             st.code(str(error))
         st.caption(t("Restore the approved tracked dashboard/data deployment artifacts. See docs/PHASE9_STREAMLIT_DASHBOARD.md.", language))
         st.stop()
+
+
+@st.cache_data(show_spinner=False, max_entries=4)
+def cached_trades(signature: tuple) -> pd.DataFrame:
+    from mft109.visualization.trade_history import load_trade_history
+    return load_trade_history()
