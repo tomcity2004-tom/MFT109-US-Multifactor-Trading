@@ -78,3 +78,14 @@ See reproducibility instructions for explicit regeneration. Missing approved
 sources cause failure; the utility never silently replaces them with older
 results or new research. Version v1 designates the reviewed data/methodology
 bundle, not a promise that future vendor re-downloads are identical.
+
+## Trade-history extension
+
+[trade_log.csv](../outputs/final_report/v1/trade_log.csv) adds the actual engine
+unit-change ledger: dates, ticker, BUY/SELL, entry/exit/increase/decrease,
+adjusted-close execution price, fractional quantity, gross USD notional,
+pre/post units, attribution of already charged costs and post-cost portfolio
+value. The package now has 27 files (11 CSVs), retaining all original financial
+materials. See [trade-history generation and accounting](TRADE_HISTORY.md).
+The manifest binds this extension to the approved data vintage and unchanged
+baseline; the separate tracked dashboard manifest records price-cache hashes.

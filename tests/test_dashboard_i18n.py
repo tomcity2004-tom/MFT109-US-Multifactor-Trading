@@ -17,7 +17,7 @@ from dashboard.components.i18n import LANGUAGES, TRANSLATIONS, t
 from dashboard.components import charts
 from dashboard.components.formatting import comparison_table, portfolio_table, sensitivity_view, sensitivity_table
 from mft109.config import PROJECT_ROOT
-from mft109.visualization.dashboard_data import load_dashboard_bundle, portfolio_view, GROUP_LABELS
+from mft109.visualization.dashboard_data import load_dashboard_bundle, portfolio_view, GROUP_LABELS, ARTIFACT_NAMES
 from phase8_support import offline
 
 
@@ -139,7 +139,10 @@ class BilingualDataTests(unittest.TestCase):
         assert_frame_equal(b.daily,before,check_exact=True)
 
     def test_deployment_artifact_bytes_match_git_main(self):
-        for path in (PROJECT_ROOT/'dashboard/data').iterdir():
+        # Protect the original financial bundle; new trade artifacts have their own
+        # checksum, baseline binding and engine-reconciliation tests.
+        for name in ('manifest.json', *ARTIFACT_NAMES):
+            path = PROJECT_ROOT/'dashboard/data'/name
             saved=subprocess.check_output(['git','show',f'HEAD:{path.relative_to(PROJECT_ROOT)}'],cwd=PROJECT_ROOT)
             self.assertEqual(hashlib.sha256(path.read_bytes()).digest(),hashlib.sha256(saved).digest())
 

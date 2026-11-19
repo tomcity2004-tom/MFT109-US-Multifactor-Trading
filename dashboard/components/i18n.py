@@ -128,6 +128,40 @@ _ZH = {
     "Historical one-at-a-time sensitivity": "歷史單一維度敏感度分析",
 }
 
+_ZH.update({
+    "Trade History": "交易紀錄",
+    "Academic simulated trades at adjusted close, not actual market fills. Fractional units are adjusted-price units.": "以調整後收盤價模擬的學術交易，並非真實市場成交。小數股數以調整後價格為計量基礎。",
+    "Costs allocate the already charged rebalance fee by gross trade value; they are not additional charges. Portfolio value is after costs.": "成本欄按交易金額分攤已扣除的調倉費用，不會額外收費。投資組合價值為扣費後數值。",
+    "Trade history is unavailable. Restore the tracked trade artifacts or run the offline official export with approved price caches.": "目前無法載入交易紀錄。請還原版本控制內的交易資料，或使用已核准的價格快取離線執行正式匯出。",
+    "Execution date range": "交易日期範圍",
+    "Ticker filter (empty = all)": "股票代碼篩選（留空代表全部）",
+    "Side filter (empty = all)": "買賣方向篩選（留空代表全部）",
+    "Choose both a start and an end date.": "請選擇開始及結束日期。",
+    "Trade count": "交易筆數",
+    "Buy count": "買入次數",
+    "Sell count": "賣出次數",
+    "Total gross trade value": "總交易金額",
+    "No trades match the current selection.": "目前篩選條件下沒有交易紀錄。",
+    "Execution date": "交易日期",
+    "Side": "買賣方向",
+    "Trade type": "交易類型",
+    "Adjusted execution price (USD)": "調整後執行價格（美元）",
+    "Quantity": "交易股數",
+    "Gross trade value (USD)": "交易金額（美元）",
+    "Pre-trade units": "交易前股數",
+    "Post-trade units": "交易後股數",
+    "Allocated cost (USD)": "分攤交易成本（美元）",
+    "Portfolio value (USD)": "投資組合價值（美元）",
+    "Download filtered trades CSV": "下載篩選後交易 CSV",
+    "Summary and CSV reflect the filters. CSV keeps original field names, identifiers and full numeric precision.": "摘要及 CSV 依目前條件篩選。CSV 保留原始欄位名稱、識別值及完整數值精度。",
+    "BUY": "買入",
+    "SELL": "賣出",
+    "NEW_ENTRY": "首次建倉",
+    "FULL_EXIT": "完全賣出",
+    "INCREASE": "增倉",
+    "DECREASE": "減倉"
+})
+
 TRANSLATIONS = {"en": {key: key for key in _ZH}, "zh_TW": _ZH}
 
 

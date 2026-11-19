@@ -39,7 +39,7 @@ class FinalPackageTests(unittest.TestCase):
     def test_required_files_are_complete_and_eligible_for_tracking(self):
         files={str(p.relative_to(PACKAGE)) for p in PACKAGE.rglob('*') if p.is_file()}
         self.assertEqual(files,set(PACKAGE_FILES))
-        self.assertEqual(len(files),26)
+        self.assertEqual(len(files),27)
         for name in files:
             self.assertNotEqual(subprocess.run(['git','check-ignore','-q',str(PACKAGE/name)],cwd=PROJECT_ROOT).returncode,0,name)
 

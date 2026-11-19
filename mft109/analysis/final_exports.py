@@ -17,6 +17,7 @@ import pandas as pd
 
 from mft109.config import BASELINE, PROJECT_ROOT
 from mft109.visualization.dashboard_data import ARTIFACT_NAMES, GROUP_LABELS, load_dashboard_bundle
+from mft109.visualization.trade_history import load_trade_history
 
 EXPORT_VERSION = "v1"
 PHASE10A_CHECKPOINT = "fcb2633b5dd5271774a281d271f87474cb3febe2"
@@ -33,7 +34,7 @@ ANALYSIS_FILES = (
 CSV_FILES = (
     "performance_summary.csv", "annual_returns.csv", "descriptive_statistics.csv", "normality_tests.csv",
     "sensitivity_summary.csv", "methodology_parameters.csv", "factor_definitions.csv",
-    "baseline_daily.csv", "portfolio_snapshots.csv", "data_quality_context.csv",
+    "baseline_daily.csv", "portfolio_snapshots.csv", "data_quality_context.csv", "trade_log.csv",
 )
 FIGURE_FILES = (
     "nav_comparison.png", "drawdown_comparison.png", "annual_returns_comparison.png",
@@ -190,6 +191,33 @@ def _phase10a_metadata(root: Path, directory: Path, bundle) -> dict:
         raise ValueError("Approved Phase 10A outputs unavailable/invalid; restore them or explicitly run python -m mft109.analysis.data_analysis") from error
 
 
+def _include_trade_history(root: Path, destination: Path, manifest: dict) -> None:
+    """Copy the engine export, preserving full provenance and existing package values."""
+    load_trade_history(root)
+    directory = root / 'dashboard/data'
+    source = directory / 'trade_log.csv'
+    shutil.copyfile(source, destination / 'trade_log.csv')
+    manifest['trade_history'] = json.loads((directory / 'trade_log_manifest.json').read_text())
+    for name in ('trade_log.csv', 'trade_log_manifest.json'):
+        path = directory / name
+        manifest['sources_sha256'][str(path.relative_to(root))] = _digest(path)
+    manifest['files']['trade_log.csv'] = {'bytes': source.stat().st_size, 'sha256': _digest(source)}
+
+
+def add_trade_log_to_package(root: Path = PROJECT_ROOT) -> Path:
+    """Extend an existing validated package without rerendering figures or metrics."""
+    destination = root / 'outputs/final_report/v1'
+    path = destination / 'manifest.json'
+    manifest = json.loads(path.read_text())
+    for name, entry in manifest['files'].items():
+        if _digest(destination / name) != entry['sha256']:
+            raise ValueError(f'Existing package checksum mismatch: {name}')
+    _include_trade_history(root, destination, manifest)
+    manifest['exporter_sha256'] = _digest(Path(__file__))
+    path.write_text(json.dumps(manifest, indent=2, sort_keys=True, allow_nan=False) + '\n')
+    return destination / 'trade_log.csv'
+
+
 def export_final_report(root: Path = PROJECT_ROOT, output_dir: Path | None = None,
                         analysis_dir: Path | None = None) -> Path:
     """Package existing results; never generate missing Phase 10A outputs silently."""
@@ -200,6 +228,7 @@ def export_final_report(root: Path = PROJECT_ROOT, output_dir: Path | None = Non
     analysis = Path(analysis_dir).resolve() if analysis_dir is not None else root / "outputs/final_analysis"
     bundle = load_dashboard_bundle(root)
     phase10a = _phase10a_metadata(root, analysis, bundle)
+    load_trade_history(root)
     extra_sources = ("PROJECT_REQUIREMENTS.md", "mft109/config.py", "mft109/analysis/data_analysis.py",
                      "data/raw/sp500_constituents.csv", "docs/FISV_DATA_REVISION.md",
                      "docs/PHASE8_TESTING_VALIDATION.md", "docs/PHASE1_1_DATA_GAP_REVIEW.md", "docs/PHASE2_RAW_FACTORS.md")
@@ -260,9 +289,10 @@ def export_final_report(root: Path = PROJECT_ROOT, output_dir: Path | None = Non
         "documentation": list(DOCUMENTS),
         "software": {name: version(name) for name in ("pandas", "numpy", "matplotlib", "pyarrow")},
         "files": {name: {"bytes": (destination / name).stat().st_size, "sha256": _digest(destination / name)}
-                  for name in PACKAGE_FILES if name != "manifest.json"},
+                  for name in PACKAGE_FILES if name not in ("manifest.json", "trade_log.csv")},
         "reproducibility": "No generation timestamp; repeat export with identical inputs/code/software is byte-identical. Source checkpoint is fixed, not current HEAD.",
     }
+    _include_trade_history(root, destination, manifest)
     (destination / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True, allow_nan=False) + "\n")
     return destination
 

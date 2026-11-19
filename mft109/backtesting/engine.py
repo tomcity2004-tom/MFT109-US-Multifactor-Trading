@@ -1,6 +1,6 @@
 """End-of-day adjusted-price accounting for validated monthly Phase 4 selections."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import logging
 
 import numpy as np
@@ -9,6 +9,7 @@ import pandas as pd
 from mft109.backtesting._inputs import adjusted_price_grid, selection_inputs
 from mft109.backtesting.execution import execution_schedule, official_sessions
 from mft109.backtesting.transaction_costs import portfolio_turnover, transaction_cost_fraction
+from mft109.backtesting.trades import TRADE_COLUMNS, empty_trade_log, rebalance_trades
 from mft109.benchmark import build_spy_benchmark
 from mft109.config import BASELINE, BaselineSettings
 from mft109.optimization.scenarios import Scenario, check_scenario
@@ -39,6 +40,7 @@ class BacktestResult:
     rebalance_audit: pd.DataFrame
     rebalance_weights: pd.DataFrame
     missing_price_events: pd.DataFrame
+    trade_log: pd.DataFrame = field(default_factory=empty_trade_log)
 
 
 class MissingHoldingPriceError(ValueError):
@@ -88,13 +90,15 @@ def run_backtest(
     events_by_date = {row.execution_date: row for row in executable_schedule.itertuples(index=False)}
     names_by_date = {date: group.ticker.tolist() for date, group in selected.groupby("formation_date")}
     daily, holdings, audits, weights, events = [], [], [], [], []
+    trades = []
 
     def result() -> BacktestResult:
         return BacktestResult(pd.DataFrame(daily, columns=DAILY_COLUMNS),
                               pd.DataFrame(holdings, columns=HOLDING_COLUMNS),
                               pd.DataFrame(audits, columns=AUDIT_COLUMNS),
                               pd.DataFrame(weights, columns=WEIGHT_COLUMNS),
-                              pd.DataFrame(events, columns=EVENT_COLUMNS))
+                              pd.DataFrame(events, columns=EVENT_COLUMNS),
+                              pd.DataFrame(trades, columns=TRADE_COLUMNS))
 
     cash = previous_value = float(baseline.initial_capital_usd)
     units: dict[str, float] = {}
@@ -136,9 +140,14 @@ def run_backtest(
             cost_fraction = transaction_cost_fraction(turnover, scenario=scenario)
             cost_usd = pre_value * cost_fraction
             post_value = pre_value - cost_usd
+            pre_trade_units = units
             units = {ticker: post_value * float(target.weights[ticker]) / float(prices[ticker])
                      for ticker in executable}
             cash = post_value * float(target.weights[CASH_ASSET])
+            trades.extend(rebalance_trades(
+                execution_date=date, formation_date=formation, before=pre_trade_units,
+                after=units, prices=prices, transaction_cost_usd=cost_usd,
+                portfolio_value_usd=post_value))
             for ticker in sorted(set(pre_weights.index) | set(target.weights.index) | set(names)):
                 weights.append(dict(formation_date=formation, execution_date=date, ticker=ticker,
                                     selected=ticker in names, executable=ticker in executable,
